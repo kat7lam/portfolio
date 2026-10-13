@@ -51,7 +51,7 @@ if (lightbox && typeof lightbox.showModal === 'function') {
       event.preventDefault();
       opener = link;
       largeImage.src = link.href;
-      largeImage.alt = link.querySelector('img').alt;
+      largeImage.alt = link.querySelector('img')?.alt || link.dataset.caption || 'Project photo';
       caption.textContent = link.dataset.caption || largeImage.alt;
       fullSize.href = link.href;
       lightbox.showModal();
@@ -110,3 +110,63 @@ if (greeting && typeof window.matchMedia === 'function') {
     document.addEventListener('visibilitychange', () => { if (document.hidden) finishGreeting(); });
   }
 }
+
+// Manually operated project-photo galleries. Without JavaScript every figure stays visible.
+document.querySelectorAll('[data-photo-gallery]').forEach(gallery => {
+  const slides = [...gallery.querySelectorAll('[data-gallery-slide]')];
+  const controls = gallery.querySelector('[data-gallery-controls]');
+  const previous = gallery.querySelector('[data-gallery-previous]');
+  const next = gallery.querySelector('[data-gallery-next]');
+  const status = gallery.querySelector('[data-gallery-status]');
+  if (slides.length < 2 || !controls || !previous || !next || !status) return;
+  let current = 0;
+  gallery.setAttribute('aria-roledescription', 'carousel');
+  const show = index => {
+    current = (index + slides.length) % slides.length;
+    const moveFocus = slides.some((slide, i) => i !== current && slide.contains(document.activeElement));
+    slides.forEach((slide, i) => {
+      slide.hidden = i !== current;
+      slide.setAttribute('role', 'group');
+      slide.setAttribute('aria-roledescription', 'slide');
+      slide.setAttribute('aria-label', `${i + 1} of ${slides.length}`);
+    });
+    status.textContent = `Photo ${current + 1} of ${slides.length}`;
+    if (moveFocus) slides[current].querySelector('a')?.focus({ preventScroll: true });
+  };
+  previous.addEventListener('click', () => show(current - 1));
+  next.addEventListener('click', () => show(current + 1));
+  gallery.addEventListener('keydown', event => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    if (event.key === 'ArrowRight') { event.preventDefault(); show(current + 1); }
+    else if (event.key === 'ArrowLeft') { event.preventDefault(); show(current - 1); }
+  });
+  show(0);
+  controls.hidden = false;
+});
+
+// Photo cards come forward only by deliberate selection; the original link stays separate.
+document.querySelectorAll('[data-note-cards]').forEach(pair => {
+  const cards = [...pair.querySelectorAll('.note-card')];
+  if (cards.length < 2) return;
+  const entries = cards.map(card => ({ card, link: card.querySelector('a[data-lightbox]'), img: card.querySelector('img') }));
+  if (entries.some(entry => !entry.link || !entry.img)) return;
+  const select = index => entries.forEach((entry, i) => {
+    entry.card.classList.toggle('is-front', i === index);
+    entry.button.setAttribute('aria-pressed', String(i === index));
+  });
+  entries.forEach((entry, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'note-card-select';
+    button.setAttribute('aria-label', `Bring photo to front: ${entry.img.alt}`);
+    entry.link.before(button);
+    button.append(entry.img);
+    entry.link.textContent = 'Open full-resolution image';
+    entry.button = button;
+    button.addEventListener('click', () => select(index));
+    entry.card.addEventListener('click', event => { if (!event.target.closest('a')) select(index); });
+    entry.card.addEventListener('focusin', () => select(index));
+  });
+  select(0);
+  pair.classList.add('cards-ready');
+});
