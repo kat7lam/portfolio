@@ -73,99 +73,11 @@ if (videoGate) {
   videoGate.hidden = false;
   video.hidden = true;
   videoGate.addEventListener('click', () => {
+    if (video.dataset.src && !video.getAttribute('src')) video.setAttribute('src', video.dataset.src);
     video.hidden = false;
     videoGate.hidden = true;
     video.focus();
   });
-}
-
-// Photo projects are the default view; plain links remain usable without JavaScript.
-const workViews = document.querySelector('.work-views');
-if (workViews) {
-  const tabs = [...workViews.querySelectorAll('[data-work-view]')];
-  const panels = tabs.map(tab => document.getElementById(tab.dataset.workView));
-  if (tabs.length === 2 && panels.every(Boolean)) {
-    workViews.setAttribute('role', 'tablist');
-    tabs.forEach((tab, i) => {
-      tab.setAttribute('role', 'tab');
-      tab.setAttribute('aria-controls', panels[i].id);
-      panels[i].setAttribute('role', 'tabpanel');
-      panels[i].setAttribute('aria-labelledby', tab.id);
-      panels[i].setAttribute('tabindex', '0');
-    });
-    const activateView = () => {
-      const selected = window.location.hash === '#project-index' ? 1 : 0;
-      const moveFocus = panels.some((panel, i) => i !== selected && panel.contains(document.activeElement));
-      tabs.forEach((tab, i) => {
-        tab.setAttribute('aria-selected', String(i === selected));
-        tab.setAttribute('tabindex', i === selected ? '0' : '-1');
-        panels[i].hidden = i !== selected;
-      });
-      if (moveFocus) tabs[selected].focus();
-    };
-    tabs.forEach((tab, i) => {
-      tab.addEventListener('click', event => {
-        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-        event.preventDefault();
-        const hash = '#' + tab.dataset.workView;
-        if (window.location.hash !== hash) window.history.pushState(null, '', hash);
-        activateView();
-      });
-      tab.addEventListener('keydown', event => {
-        let next;
-        if (event.key === 'ArrowRight') next = (i + 1) % tabs.length;
-        else if (event.key === 'ArrowLeft') next = (i + tabs.length - 1) % tabs.length;
-        else if (event.key === 'Home') next = 0;
-        else if (event.key === 'End') next = tabs.length - 1;
-        else if (event.key === ' ') { event.preventDefault(); tab.click(); return; }
-        else return;
-        event.preventDefault();
-        tabs.forEach((item, index) => item.setAttribute('tabindex', index === next ? '0' : '-1'));
-        tabs[next].focus();
-      });
-    });
-    window.addEventListener('hashchange', activateView);
-    window.addEventListener('popstate', activateView);
-    activateView();
-  }
-}
-
-// Index rows are visible by default. Enhance only with supported motion/observer APIs.
-const projectIndex = document.querySelector('.project-index');
-if (projectIndex && 'IntersectionObserver' in window && typeof window.matchMedia === 'function') {
-  const indexMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (!indexMotion.matches) {
-    const rows = [...projectIndex.querySelectorAll('tbody tr')];
-    let played = false;
-    let finishTimer = null;
-    let observer;
-    const finish = () => {
-      if (finishTimer !== null) { clearTimeout(finishTimer); finishTimer = null; }
-      projectIndex.classList.remove('index-is-entering');
-      projectIndex.dataset.indexReveal = 'complete';
-    };
-    const showImmediately = () => {
-      played = true;
-      if (observer) observer.disconnect();
-      finish();
-    };
-    indexMotion.addEventListener('change', () => { if (indexMotion.matches) showImmediately(); });
-    try {
-      observer = new window.IntersectionObserver(entries => {
-        if (played || !entries.some(entry => entry.isIntersecting)) return;
-        played = true;
-        observer.disconnect();
-        if (indexMotion.matches) { finish(); return; }
-        rows.forEach((row, index) => row.style.setProperty('--index-row-delay', `${index * 60}ms`));
-        projectIndex.dataset.indexReveal = 'running';
-        projectIndex.classList.add('index-is-entering');
-        finishTimer = setTimeout(finish, Math.max(0, rows.length - 1) * 60 + 520);
-      }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
-      observer.observe(projectIndex);
-    } catch (error) {
-      showImmediately();
-    }
-  }
 }
 
 // A once-only greeting; no loop, controls, or live announcements.
