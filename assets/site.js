@@ -34,7 +34,7 @@ if (filters) {
     const button = event.target.closest('[data-filter]');
     if (!button) return;
     filters.querySelectorAll('button').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-    cards.forEach(card => { card.hidden = button.dataset.filter !== 'All' && card.dataset.group !== button.dataset.filter; });
+    cards.forEach(card => { card.hidden = button.dataset.filter !== 'All' && !card.dataset.group.split(/\s+/).includes(button.dataset.filter); });
     document.querySelector('#filter-status').textContent = `${cards.filter(card => !card.hidden).length} projects shown`;
   });
 }
@@ -130,6 +130,57 @@ if (typewriter && typeof window.matchMedia === 'function') {
   motion.addEventListener('change', sync);
   document.addEventListener('visibilitychange', sync);
   sync();
+}
+
+// Photo projects are the default view; plain links remain usable without JavaScript.
+const workViews = document.querySelector('.work-views');
+if (workViews) {
+  const tabs = [...workViews.querySelectorAll('[data-work-view]')];
+  const panels = tabs.map(tab => document.getElementById(tab.dataset.workView));
+  if (tabs.length === 2 && panels.every(Boolean)) {
+    workViews.setAttribute('role', 'tablist');
+    tabs.forEach((tab, i) => {
+      tab.setAttribute('role', 'tab');
+      tab.setAttribute('aria-controls', panels[i].id);
+      panels[i].setAttribute('role', 'tabpanel');
+      panels[i].setAttribute('aria-labelledby', tab.id);
+      panels[i].setAttribute('tabindex', '0');
+    });
+    const activateView = () => {
+      const selected = window.location.hash === '#project-index' ? 1 : 0;
+      const moveFocus = panels.some((panel, i) => i !== selected && panel.contains(document.activeElement));
+      tabs.forEach((tab, i) => {
+        tab.setAttribute('aria-selected', String(i === selected));
+        tab.setAttribute('tabindex', i === selected ? '0' : '-1');
+        panels[i].hidden = i !== selected;
+      });
+      if (moveFocus) tabs[selected].focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', event => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        const hash = '#' + tab.dataset.workView;
+        if (window.location.hash !== hash) window.history.pushState(null, '', hash);
+        activateView();
+      });
+      tab.addEventListener('keydown', event => {
+        let next;
+        if (event.key === 'ArrowRight') next = (i + 1) % tabs.length;
+        else if (event.key === 'ArrowLeft') next = (i + tabs.length - 1) % tabs.length;
+        else if (event.key === 'Home') next = 0;
+        else if (event.key === 'End') next = tabs.length - 1;
+        else if (event.key === ' ') { event.preventDefault(); tab.click(); return; }
+        else return;
+        event.preventDefault();
+        tabs.forEach((item, index) => item.setAttribute('tabindex', index === next ? '0' : '-1'));
+        tabs[next].focus();
+      });
+    });
+    window.addEventListener('hashchange', activateView);
+    window.addEventListener('popstate', activateView);
+    activateView();
+  }
 }
 
 // Index rows are visible by default. Enhance only with supported motion/observer APIs.
