@@ -79,59 +79,6 @@ if (videoGate) {
   });
 }
 
-// Optional home typing line. Static text remains available without JavaScript.
-const typewriter = document.querySelector('[data-typewriter]');
-if (typewriter && typeof window.matchMedia === 'function') {
-  const output = typewriter.querySelector('[data-typewriter-output]');
-  const toggle = typewriter.querySelector('[data-typewriter-toggle]');
-  const phrases = ['hypersonic entry', 'medical devices', 'a tortilla machine'];
-  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let phraseIndex = 0;
-  let characters = phrases[0].length;
-  let phase = 'hold';
-  let userPaused = false;
-  let timer = null;
-  const paint = () => { output.textContent = phrases[phraseIndex].slice(0, characters); };
-  const running = () => !userPaused && !motion.matches && !document.hidden;
-  const stopTimer = () => { if (timer !== null) { clearTimeout(timer); timer = null; } };
-  const delay = () => phase === 'hold' ? 1500 : phase === 'typing' ? 75 : phase === 'gap' ? 250 : 40;
-  const tick = () => {
-    timer = null;
-    if (!running()) return;
-    if (phase === 'hold') {
-      phase = 'deleting';
-    } else if (phase === 'deleting') {
-      characters = Math.max(0, characters - 1);
-      if (characters === 0) { phraseIndex = (phraseIndex + 1) % phrases.length; phase = 'gap'; }
-    } else if (phase === 'gap') {
-      phase = 'typing';
-    } else {
-      characters = Math.min(phrases[phraseIndex].length, characters + 1);
-      if (characters === phrases[phraseIndex].length) phase = 'hold';
-    }
-    paint();
-    timer = setTimeout(tick, delay());
-  };
-  const sync = () => {
-    stopTimer();
-    if (motion.matches) { characters = phrases[phraseIndex].length; phase = 'hold'; paint(); }
-    typewriter.dataset.typewriterState = motion.matches ? 'static' : running() ? 'running' : 'paused';
-    toggle.hidden = motion.matches;
-    toggle.textContent = userPaused ? 'Resume' : 'Pause';
-    toggle.setAttribute('aria-label', userPaused ? 'Resume typing animation' : 'Pause typing animation');
-    toggle.setAttribute('aria-pressed', String(userPaused));
-    if (running()) timer = setTimeout(tick, delay());
-  };
-  toggle.addEventListener('click', () => {
-    userPaused = !userPaused;
-    if (userPaused) { characters = phrases[phraseIndex].length; phase = 'hold'; paint(); }
-    sync();
-  });
-  motion.addEventListener('change', sync);
-  document.addEventListener('visibilitychange', sync);
-  sync();
-}
-
 // Photo projects are the default view; plain links remain usable without JavaScript.
 const workViews = document.querySelector('.work-views');
 if (workViews) {
@@ -218,5 +165,36 @@ if (projectIndex && 'IntersectionObserver' in window && typeof window.matchMedia
     } catch (error) {
       showImmediately();
     }
+  }
+}
+
+// A once-only greeting; no loop, controls, or live announcements.
+const greeting = document.querySelector('[data-greeting]');
+if (greeting && typeof window.matchMedia === 'function') {
+  const greetingMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const greetingText = greeting.querySelector('[data-greeting-text]');
+  const fullGreeting = greetingText.textContent;
+  let greetingTimer = null;
+  let position = 0;
+  const finishGreeting = () => {
+    if (greetingTimer !== null) clearTimeout(greetingTimer);
+    greetingTimer = null;
+    greetingText.textContent = fullGreeting;
+    greeting.classList.remove('greeting-is-writing');
+  };
+  const writeGreeting = () => {
+    greetingTimer = null;
+    if (greetingMotion.matches || document.hidden) { finishGreeting(); return; }
+    position += 1;
+    greetingText.textContent = fullGreeting.slice(0, position);
+    if (position >= fullGreeting.length) { finishGreeting(); return; }
+    greetingTimer = setTimeout(writeGreeting, 85);
+  };
+  if (!greetingMotion.matches && !document.hidden) {
+    greetingText.textContent = '';
+    greeting.classList.add('greeting-is-writing');
+    greetingTimer = setTimeout(writeGreeting, 85);
+    greetingMotion.addEventListener('change', () => { if (greetingMotion.matches) finishGreeting(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) finishGreeting(); });
   }
 }

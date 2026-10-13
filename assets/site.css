@@ -117,19 +117,6 @@ a:focus-visible,button:focus-visible,video:focus-visible{outline-color:#6f4f45}
  .index-mobile-label{display:inline;font-family:var(--mono);font-size:9px;margin-right:3px}
 }
 
-/* A small, pausable typing line. The heading and phrase area do not resize. */
-.hero-typewriter{display:flex;align-items:center;justify-content:center;gap:8px;min-height:34px;margin:17px auto 0;color:var(--muted)}
-.typewriter-line{display:flex;align-items:baseline;gap:8px;font-size:12px;line-height:1.7;white-space:nowrap}
-.typewriter-phrase{display:inline-block;width:19ch;min-width:19ch;text-align:left;font:12px/1.7 var(--mono)}
-.typewriter-cursor{display:inline-block;width:1px;height:1em;margin-left:2px;vertical-align:-.12em;background:currentColor;visibility:hidden}
-[data-typewriter-state="running"] .typewriter-cursor{visibility:visible;animation:typewriter-caret .9s steps(1,end) infinite}
-.typewriter-controls{display:inline-flex;width:46px;min-width:46px;justify-content:flex-start}
-.typewriter-toggle{padding:5px 2px;min-height:32px;min-width:42px;border:0;background:transparent;font-size:10px;line-height:1.5;text-align:left;text-decoration:underline;text-underline-offset:4px;color:var(--muted)}
-.typewriter-toggle:hover{color:var(--ink)}
-@keyframes typewriter-caret{0%,49%{opacity:1}50%,100%{opacity:0}}
-@media(max-width:380px){.hero-typewriter{gap:5px}.typewriter-line{font-size:11px;gap:6px}.typewriter-phrase{font-size:11px}.typewriter-controls{width:42px;min-width:42px}}
-@media(prefers-reduced-motion:reduce){.typewriter-cursor{animation:none!important;visibility:hidden!important}}
-
 /* A one-time, progressive-enhancement entrance for the project index. */
 .index-is-entering tbody tr{animation:index-row-in .42s ease-out both;animation-delay:var(--index-row-delay,0ms)}
 @keyframes index-row-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -147,3 +134,11 @@ a:focus-visible,button:focus-visible,video:focus-visible{outline-color:#6f4f45}
 @media(max-width:380px){.site-header .site-nav,.js .site-header .site-nav{gap:16px}}
 .work-views{display:flex;gap:28px;border-bottom:1px solid var(--line);margin-bottom:30px}.work-views a{display:inline-flex;align-items:center;min-height:48px;padding:8px 0;border-bottom:2px solid transparent;font-size:14px;color:var(--muted)}.work-views a:hover{color:var(--ink)}.work-views a[aria-selected="true"]{border-bottom-color:var(--accent);color:var(--ink)}.work-panel[hidden],.project-index[hidden]{display:none!important}.work-panel,.project-index{scroll-margin-top:28px}.work-panel+.project-index{margin-top:55px}.work-views~.project-index:not([hidden]){margin-top:0}.project-index[role="tabpanel"]{padding-top:8px}
 @media print{.work-views{display:none}.work-panel[hidden],.project-index[hidden]{display:block!important}}
+
+/* Explicit specificity protects horizontal padding from the general nav rule. */
+.site-header .site-nav>a.nav-resume{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;min-width:94px;min-height:44px;padding:10px 20px;line-height:1.4;white-space:nowrap;border-radius:999px}
+@media(max-width:700px){.site-header .site-nav>a.nav-resume{min-width:90px;min-height:44px;padding:10px 18px}}
+
+/* One brief greeting entrance; its final text stays still. */
+.greeting-visual{display:inline-block;min-width:12ch;min-height:1.5em;line-height:1.5;text-align:center}.greeting-cursor{display:inline-block;width:1px;height:1em;vertical-align:-.12em;margin-left:2px;background:currentColor;visibility:hidden}.greeting-is-writing .greeting-cursor{visibility:visible}
+@media(prefers-reduced-motion:reduce){.greeting-cursor{visibility:hidden!important}}
