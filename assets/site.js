@@ -78,3 +78,94 @@ if (videoGate) {
     video.focus();
   });
 }
+
+// Optional home typing line. Static text remains available without JavaScript.
+const typewriter = document.querySelector('[data-typewriter]');
+if (typewriter && typeof window.matchMedia === 'function') {
+  const output = typewriter.querySelector('[data-typewriter-output]');
+  const toggle = typewriter.querySelector('[data-typewriter-toggle]');
+  const phrases = ['hypersonic entry', 'medical devices', 'a tortilla machine'];
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let phraseIndex = 0;
+  let characters = phrases[0].length;
+  let phase = 'hold';
+  let userPaused = false;
+  let timer = null;
+  const paint = () => { output.textContent = phrases[phraseIndex].slice(0, characters); };
+  const running = () => !userPaused && !motion.matches && !document.hidden;
+  const stopTimer = () => { if (timer !== null) { clearTimeout(timer); timer = null; } };
+  const delay = () => phase === 'hold' ? 1500 : phase === 'typing' ? 75 : phase === 'gap' ? 250 : 40;
+  const tick = () => {
+    timer = null;
+    if (!running()) return;
+    if (phase === 'hold') {
+      phase = 'deleting';
+    } else if (phase === 'deleting') {
+      characters = Math.max(0, characters - 1);
+      if (characters === 0) { phraseIndex = (phraseIndex + 1) % phrases.length; phase = 'gap'; }
+    } else if (phase === 'gap') {
+      phase = 'typing';
+    } else {
+      characters = Math.min(phrases[phraseIndex].length, characters + 1);
+      if (characters === phrases[phraseIndex].length) phase = 'hold';
+    }
+    paint();
+    timer = setTimeout(tick, delay());
+  };
+  const sync = () => {
+    stopTimer();
+    if (motion.matches) { characters = phrases[phraseIndex].length; phase = 'hold'; paint(); }
+    typewriter.dataset.typewriterState = motion.matches ? 'static' : running() ? 'running' : 'paused';
+    toggle.hidden = motion.matches;
+    toggle.textContent = userPaused ? 'Resume' : 'Pause';
+    toggle.setAttribute('aria-label', userPaused ? 'Resume typing animation' : 'Pause typing animation');
+    toggle.setAttribute('aria-pressed', String(userPaused));
+    if (running()) timer = setTimeout(tick, delay());
+  };
+  toggle.addEventListener('click', () => {
+    userPaused = !userPaused;
+    if (userPaused) { characters = phrases[phraseIndex].length; phase = 'hold'; paint(); }
+    sync();
+  });
+  motion.addEventListener('change', sync);
+  document.addEventListener('visibilitychange', sync);
+  sync();
+}
+
+// Index rows are visible by default. Enhance only with supported motion/observer APIs.
+const projectIndex = document.querySelector('.project-index');
+if (projectIndex && 'IntersectionObserver' in window && typeof window.matchMedia === 'function') {
+  const indexMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!indexMotion.matches) {
+    const rows = [...projectIndex.querySelectorAll('tbody tr')];
+    let played = false;
+    let finishTimer = null;
+    let observer;
+    const finish = () => {
+      if (finishTimer !== null) { clearTimeout(finishTimer); finishTimer = null; }
+      projectIndex.classList.remove('index-is-entering');
+      projectIndex.dataset.indexReveal = 'complete';
+    };
+    const showImmediately = () => {
+      played = true;
+      if (observer) observer.disconnect();
+      finish();
+    };
+    indexMotion.addEventListener('change', () => { if (indexMotion.matches) showImmediately(); });
+    try {
+      observer = new window.IntersectionObserver(entries => {
+        if (played || !entries.some(entry => entry.isIntersecting)) return;
+        played = true;
+        observer.disconnect();
+        if (indexMotion.matches) { finish(); return; }
+        rows.forEach((row, index) => row.style.setProperty('--index-row-delay', `${index * 60}ms`));
+        projectIndex.dataset.indexReveal = 'running';
+        projectIndex.classList.add('index-is-entering');
+        finishTimer = setTimeout(finish, Math.max(0, rows.length - 1) * 60 + 520);
+      }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+      observer.observe(projectIndex);
+    } catch (error) {
+      showImmediately();
+    }
+  }
+}

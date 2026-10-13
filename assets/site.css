@@ -75,3 +75,68 @@ a:focus-visible,button:focus-visible,video:focus-visible{outline-color:#6f4f45}
 .inline-device img{display:block;width:100%;height:auto;max-height:none;padding:0;object-fit:contain;background:transparent}
 .inline-device figcaption{font-size:11px;line-height:1.7;color:var(--muted);margin-top:13px}
 @media(max-width:1000px){.contribution-with-device{grid-template-columns:1fr;gap:25px}.inline-device{width:min(100%,440px);justify-self:center}}
+
+/* Framer-style project table of contents; photos and project narratives stay below. */
+.project-index{margin:0 0 66px;scroll-margin-top:28px}
+.index-heading{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:24px}
+.index-heading h2{font-size:36px}
+.index-heading p{font-size:12px;color:var(--muted)}
+.project-index table{width:100%;border-collapse:collapse;text-align:left;table-layout:fixed}
+.project-index th{font:10px/1.6 var(--mono);letter-spacing:.025em;color:var(--muted);font-weight:400;padding:16px 12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.project-index th:nth-child(1){width:6%;padding-left:0}
+.project-index th:nth-child(2){width:52%}
+.project-index th:nth-child(3){width:18%}
+.project-index th:nth-child(4){width:24%}
+.project-index tbody tr{position:relative;border-bottom:1px solid var(--line)}
+.project-index td{padding:25px 12px;vertical-align:middle}
+.project-index .index-number{font:10px/1.6 var(--mono);color:var(--muted);padding-left:0}
+.index-title a{font-size:17px;line-height:1.55;color:var(--ink)}
+.index-title a:after{content:"";position:absolute;inset:0}
+.project-index tbody tr:hover{background:#f5ede5}
+.project-index tbody tr:focus-within{outline:2px solid var(--accent);outline-offset:3px;background:#f5ede5}
+.index-title a:hover{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px}
+.index-timeline,.index-status{font-size:12px;line-height:1.8;color:var(--muted)}
+.status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.status-progress{background:#747f68}.status-complete{background:#989d91}
+.index-mobile-label{display:none}
+@media(max-width:700px){
+ .project-index{margin-bottom:44px}
+ .index-heading{display:block;margin-bottom:19px}
+ .index-heading h2{font-size:32px}.index-heading p{margin-top:9px}
+ .project-index table,.project-index tbody{display:block;width:100%}
+ .project-index thead{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+ .project-index tbody tr{display:grid;grid-template-columns:25px minmax(0,1fr);column-gap:13px;padding:20px 0}
+ .project-index tbody tr:first-child{border-top:1px solid var(--line)}
+ .project-index td{display:block;padding:0;min-width:0}
+ .project-index .index-number{grid-column:1;grid-row:1/4;padding-top:3px}
+ .project-index .index-title{grid-column:2;grid-row:1;margin-bottom:10px}
+ .index-title a{font-size:16px;line-height:1.5}
+ .project-index .index-timeline{grid-column:2;grid-row:2}
+ .project-index .index-status{grid-column:2;grid-row:3}
+ .index-timeline,.index-status{font-size:11px;line-height:1.8}
+ .index-mobile-label{display:inline;font-family:var(--mono);font-size:9px;margin-right:3px}
+}
+
+/* A small, pausable typing line. The heading and phrase area do not resize. */
+.hero-typewriter{display:flex;align-items:center;justify-content:center;gap:8px;min-height:34px;margin:17px auto 0;color:var(--muted)}
+.typewriter-line{display:flex;align-items:baseline;gap:8px;font-size:12px;line-height:1.7;white-space:nowrap}
+.typewriter-phrase{display:inline-block;width:19ch;min-width:19ch;text-align:left;font:12px/1.7 var(--mono)}
+.typewriter-cursor{display:inline-block;width:1px;height:1em;margin-left:2px;vertical-align:-.12em;background:currentColor;visibility:hidden}
+[data-typewriter-state="running"] .typewriter-cursor{visibility:visible;animation:typewriter-caret .9s steps(1,end) infinite}
+.typewriter-controls{display:inline-flex;width:46px;min-width:46px;justify-content:flex-start}
+.typewriter-toggle{padding:5px 2px;min-height:32px;min-width:42px;border:0;background:transparent;font-size:10px;line-height:1.5;text-align:left;text-decoration:underline;text-underline-offset:4px;color:var(--muted)}
+.typewriter-toggle:hover{color:var(--ink)}
+@keyframes typewriter-caret{0%,49%{opacity:1}50%,100%{opacity:0}}
+@media(max-width:380px){.hero-typewriter{gap:5px}.typewriter-line{font-size:11px;gap:6px}.typewriter-phrase{font-size:11px}.typewriter-controls{width:42px;min-width:42px}}
+@media(prefers-reduced-motion:reduce){.typewriter-cursor{animation:none!important;visibility:hidden!important}}
+
+/* A one-time, progressive-enhancement entrance for the project index. */
+.index-is-entering tbody tr{animation:index-row-in .42s ease-out both;animation-delay:var(--index-row-delay,0ms)}
+@keyframes index-row-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.index-is-entering tbody tr:focus-within{animation:none!important;opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.index-is-entering tbody tr{animation:none!important;opacity:1;transform:none}}
+
+/* Shorter opening and four selected projects; existing Polaroids are untouched. */
+.home-hero{padding-top:36px}.hero-greeting{margin-bottom:12px}.hero-intro{margin-top:18px;line-height:1.65}.hero-actions{margin-top:18px}.home .selected-section{padding-top:42px}.home .selected-section .project-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:38px 24px}.home .selected-section .work-card:not(:first-child) h3{font-size:30px}.more-projects{text-align:center;margin-top:36px}
+@media(min-width:701px) and (max-width:1050px){.home .selected-section .project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.home .selected-section .work-card:first-child{grid-column:auto;display:block;padding:16px}.home .selected-section .work-card:first-child .card-copy{padding:22px 4px 0}.home .selected-section .work-card:first-child h3{font-size:30px}}
+@media(max-width:700px){.home-hero{padding-top:26px}.home .selected-section .project-grid{grid-template-columns:1fr}.home .selected-section{padding-top:32px}.home .selected-section .work-card:not(:first-child) h3{font-size:32px}}
