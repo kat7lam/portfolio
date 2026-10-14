@@ -169,3 +169,46 @@ body[data-project="scheduling"] .schedule-comparison .photo-link{display:flex;al
 body[data-project="scheduling"] .schedule-comparison img{display:block;width:100%;height:100%;max-height:none;padding:10px;object-fit:contain}
 body[data-project="scheduling"] .schedule-comparison figcaption h3{font-size:23px}
 @media(max-width:700px){body[data-project="scheduling"] .schedule-comparison{grid-template-columns:1fr;gap:24px}}
+
+/* The three alloy photographs form one compact, manually selected deck. */
+body[data-project="materials"] .three-card-deck{grid-template-columns:1fr;max-width:390px;width:100%;justify-self:center;gap:28px;padding:24px 32px}
+body[data-project="materials"] .three-card-deck.cards-ready{grid-template-columns:minmax(0,1fr);gap:0;padding:30px 32px 36px}
+body[data-project="materials"] .gallery-section .three-card-deck .note-card{max-width:none;width:100%;margin:0;justify-self:stretch;transform:none}
+body[data-project="materials"] .three-card-deck.cards-ready .note-card{grid-area:1/1;align-self:start;z-index:1;transform:translate(-18px,4px) rotate(-6deg)}
+body[data-project="materials"] .three-card-deck.cards-ready .note-card:nth-child(2){transform:translate(17px,-7px) rotate(5deg);z-index:2}
+body[data-project="materials"] .three-card-deck.cards-ready .note-card:nth-child(3){transform:translate(5px,16px) rotate(-2deg);z-index:3}
+body[data-project="materials"] .three-card-deck.cards-ready .note-card.is-front,body[data-project="materials"] .three-card-deck.cards-ready .note-card:focus-within{z-index:5;transform:rotate(-1deg)}
+body[data-project="materials"] .gallery-section .three-card-deck img{width:100%;height:240px;max-height:240px;object-fit:contain;padding:0}
+body[data-project="materials"] .three-card-deck.cards-ready .note-card:not(.is-front) figcaption,body[data-project="materials"] .three-card-deck.cards-ready .note-card:not(.is-front) .photo-link{visibility:hidden}
+body[data-project="materials"] .three-card-deck.cards-ready .note-card:focus-within figcaption,body[data-project="materials"] .three-card-deck.cards-ready .note-card:focus-within .photo-link{visibility:visible}
+@media(max-width:430px){body[data-project="materials"] .three-card-deck,body[data-project="materials"] .three-card-deck.cards-ready{padding-inline:28px}body[data-project="materials"] .gallery-section .three-card-deck img{height:210px;max-height:210px}}
+/* Project header photographs fill the content width at their natural aspect ratio. */
+body[data-project] .project-heading+figure{max-width:none;width:100%;margin-inline:0}
+body[data-project] .project-heading+figure .project-hero img{display:block;width:100%;height:auto;max-height:none;padding:0;object-fit:contain}
+
+/* Large, separate touch targets also select cards whose edges are partly covered. */
+.note-card-controls{grid-area:2/1;display:flex;justify-content:center;gap:8px;margin-top:36px;position:relative;z-index:6}
+.note-card-controls button{min-width:64px;min-height:44px;padding:8px 5px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font:12px/1.4 var(--sans);cursor:pointer}
+.note-card-controls button[aria-pressed="true"]{border-bottom-color:var(--ink);color:var(--ink)}.note-card-controls button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+/* AUV uses the same full-width header treatment while keeping manual controls. */
+body[data-project="auv"] .build-photo-gallery{width:100%;max-width:none;margin-inline:0}
+body[data-project="auv"] .build-photo-gallery .photo-link{display:block;height:auto;aspect-ratio:auto}
+body[data-project="auv"] .build-photo-gallery img{display:block;width:100%;height:auto;max-height:none;object-fit:contain}
+
+/* AUV testing media sits with the iteration narrative, beneath the full-width cover. */
+body[data-project="auv"] .iteration-media{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start;margin-top:26px}
+body[data-project="auv"] .iteration-media .build-photo-gallery,body[data-project="auv"] .iteration-media .pier-test-photo{width:100%;max-width:340px;margin:0;min-width:0}
+body[data-project="auv"] .iteration-media .build-photo-gallery .photo-link,body[data-project="auv"] .iteration-media .pier-test-photo .photo-link{display:flex;align-items:center;justify-content:center;width:100%;height:auto;aspect-ratio:4/3;border-radius:12px;background:#f1e8df;overflow:hidden}
+body[data-project="auv"] .iteration-media .build-photo-gallery img,body[data-project="auv"] .iteration-media .pier-test-photo img{width:100%;height:100%;max-height:none;object-fit:contain}
+body[data-project="auv"] .iteration-media figcaption{padding-top:12px;color:var(--muted)}body[data-project="auv"] .iteration-media figcaption p{font-size:12px;line-height:1.75}
+body[data-project="auv"] .iteration-media .gallery-controls{flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}body[data-project="auv"] .iteration-media .gallery-controls button{padding:9px 11px;font-size:12px}
+@media(max-width:1000px){body[data-project="auv"] .iteration-media{grid-template-columns:1fr;gap:28px}}
+
+/* A small cropped photo follows all About prose and grouped facts. Original opens on click. */
+.about-copy .about-cupcakes{width:min(100%,320px);margin:34px 0 12px;padding:12px 12px 0;border:1px solid #ded1c2;border-radius:4px;background:var(--white);transform:rotate(-2deg)}
+.about-copy .about-cupcakes .photo-link{display:block;width:100%;aspect-ratio:1;overflow:hidden;border-radius:2px;background:transparent}
+.about-copy .about-cupcakes img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 48%}
+.about-copy .about-cupcakes figcaption{padding:13px 4px;font-size:12px;line-height:1.7;color:var(--muted)}
+/* A quieter peach wash continues down inner pages without changing the homepage. */
+body.inner-page{background-color:var(--paper);background-image:radial-gradient(ellipse at 0% 18%,rgba(239,184,150,.08),transparent 62%),radial-gradient(ellipse at 100% 68%,rgba(235,191,179,.06),transparent 60%),linear-gradient(180deg,#faf5ef 0%,#f8eee7 50%,#faf5ef 100%);background-size:100% 1600px,100% 1800px,100% 1800px;background-position:left top,right top,left top;background-repeat:repeat-y;background-attachment:scroll}
+@media print{body.inner-page{background:#fff}}

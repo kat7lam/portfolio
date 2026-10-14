@@ -150,9 +150,15 @@ document.querySelectorAll('[data-note-cards]').forEach(pair => {
   if (cards.length < 2) return;
   const entries = cards.map(card => ({ card, link: card.querySelector('a[data-lightbox]'), img: card.querySelector('img') }));
   if (entries.some(entry => !entry.link || !entry.img)) return;
+  const selectors = [];
+  const controls = document.createElement('div');
+  controls.className = 'note-card-controls';
+  controls.setAttribute('role', 'group');
+  controls.setAttribute('aria-label', 'Choose a photograph');
   const select = index => entries.forEach((entry, i) => {
     entry.card.classList.toggle('is-front', i === index);
     entry.button.setAttribute('aria-pressed', String(i === index));
+    selectors[i]?.setAttribute('aria-pressed', String(i === index));
   });
   entries.forEach((entry, index) => {
     const button = document.createElement('button');
@@ -166,7 +172,15 @@ document.querySelectorAll('[data-note-cards]').forEach(pair => {
     button.addEventListener('click', () => select(index));
     entry.card.addEventListener('click', event => { if (!event.target.closest('a')) select(index); });
     entry.card.addEventListener('focusin', () => select(index));
+    const selector = document.createElement('button');
+    selector.type = 'button';
+    selector.textContent = `Photo ${index + 1}`;
+    selector.setAttribute('aria-label', `Show photo ${index + 1}: ${entry.img.alt}`);
+    selector.addEventListener('click', () => select(index));
+    selectors.push(selector);
+    controls.append(selector);
   });
+  pair.append(controls);
   select(0);
   pair.classList.add('cards-ready');
 });
