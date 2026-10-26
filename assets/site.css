@@ -212,3 +212,14 @@ body[data-project="auv"] .iteration-media .gallery-controls{flex-wrap:wrap;gap:8
 /* A quieter peach wash continues down inner pages without changing the homepage. */
 body.inner-page{background-color:var(--paper);background-image:radial-gradient(ellipse at 0% 18%,rgba(239,184,150,.08),transparent 62%),radial-gradient(ellipse at 100% 68%,rgba(235,191,179,.06),transparent 60%),linear-gradient(180deg,#faf5ef 0%,#f8eee7 50%,#faf5ef 100%);background-size:100% 1600px,100% 1800px,100% 1800px;background-position:left top,right top,left top;background-repeat:repeat-y;background-attachment:scroll}
 @media print{body.inner-page{background:#fff}}
+
+/* Crop and straighten only the homepage people photo. */
+.home .about-band .people-photo {
+  overflow: hidden;
+  border-radius: 12px;
+}
+.home .about-band .people-photo img {
+  object-position: 50% 100%;
+  border-radius: 0;
+  transform: rotate(-8deg) scale(1.18);
+}
