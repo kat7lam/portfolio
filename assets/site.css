@@ -182,9 +182,14 @@ body[data-project="materials"] .gallery-section .three-card-deck img{width:100%;
 body[data-project="materials"] .three-card-deck.cards-ready .note-card:not(.is-front) figcaption,body[data-project="materials"] .three-card-deck.cards-ready .note-card:not(.is-front) .photo-link{visibility:hidden}
 body[data-project="materials"] .three-card-deck.cards-ready .note-card:focus-within figcaption,body[data-project="materials"] .three-card-deck.cards-ready .note-card:focus-within .photo-link{visibility:visible}
 @media(max-width:430px){body[data-project="materials"] .three-card-deck,body[data-project="materials"] .three-card-deck.cards-ready{padding-inline:28px}body[data-project="materials"] .gallery-section .three-card-deck img{height:210px;max-height:210px}}
-/* Project header photographs fill the content width at their natural aspect ratio. */
-body[data-project] .project-heading+figure{max-width:none;width:100%;margin-inline:0}
-body[data-project] .project-heading+figure .project-hero img{display:block;width:100%;height:auto;max-height:none;padding:0;object-fit:contain}
+/* Compact project introductions crop each photo to fill the same frame. */
+body.inner-page .project-heading+figure{width:100%;max-width:680px;margin-inline:auto}
+body.inner-page .project-heading+figure .project-hero img{display:block;width:100%;height:320px;max-height:320px;padding:0;object-fit:cover;object-position:center}
+@media(max-width:700px){body.inner-page .project-heading+figure .project-hero img{height:240px;max-height:240px}}
+
+/* Project cover photos fill their cards edge to edge. */
+.work-card .card-image img{object-fit:cover;object-position:center;padding:0;transform:none}
+.work-card .card-image:hover img{transform:none}
 
 /* Large, separate touch targets also select cards whose edges are partly covered. */
 .note-card-controls{grid-area:2/1;display:flex;justify-content:center;gap:8px;margin-top:36px;position:relative;z-index:6}
