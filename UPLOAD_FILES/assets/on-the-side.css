@@ -1,0 +1,91 @@
+/* Only the On the Side page uses these styles. */
+.side-page .side-main { max-width: 1260px; padding-bottom: 88px; }
+.side-page .side-intro { padding: 48px 0 50px; border-bottom: 1px solid var(--line); }
+.side-page .side-intro .eyebrow { font-size: .875rem; margin-bottom: 17px; }
+.side-page .side-intro h1 { font-size: clamp(3.75rem, 6.6vw, 5.6rem); }
+.side-page .matcha-story { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: clamp(30px, 5vw, 72px); align-items: center; padding: 64px 0 72px; }
+.side-page .matcha-copy h2 { font-size: clamp(2.15rem, 3.3vw, 2.85rem); line-height: 1.13; margin-bottom: 25px; }
+.side-page .matcha-copy p { font-size: 1rem; line-height: 1.85; color: var(--muted); }
+.side-page .matcha-copy p + p { margin-top: 18px; }
+.side-page .matcha-copy .text-link { margin-top: 22px; font-size: 1rem; }
+.side-page .matcha-photos { min-width: 0; }
+.side-page .matcha-polaroids, .side-page .matcha-polaroids.cards-ready { display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; max-width: 580px; margin-inline: auto; padding: 24px 30px 0; gap: 28px; }
+.side-page .matcha-polaroids .note-card { width: 100%; min-width: 0; max-width: none; position: relative; justify-self: stretch; margin: 0; padding: 13px 13px 0; background: var(--white); border: 1px solid #ded1c2; border-radius: 3px; box-shadow: 0 8px 25px #62351f12; }
+.side-page .matcha-polaroids img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; border-radius: 0; }
+.side-page .matcha-polaroids figcaption { display: block; min-height: 64px; padding: 13px 3px 17px; font: .875rem / 1.55 var(--sans); color: var(--muted); }
+.side-page .matcha-polaroids .photo-link::after { display: none; }
+.side-page .matcha-polaroids.cards-ready { gap: 0; }
+.side-page .matcha-polaroids.cards-ready .note-card { grid-area: 1 / 1; align-self: start; z-index: 1; transform: translate(-15px, 10px) rotate(-6deg); }
+.side-page .matcha-polaroids.cards-ready .note-card:nth-child(2) { transform: translate(17px, -10px) rotate(5deg); z-index: 2; }
+.side-page .matcha-polaroids.cards-ready .note-card:nth-child(3) { transform: translate(-12px, -15px) rotate(-3deg); z-index: 3; }
+.side-page .matcha-polaroids.cards-ready .note-card:nth-child(4) { transform: translate(13px, 13px) rotate(7deg); z-index: 4; }
+.side-page .matcha-polaroids.cards-ready .note-card.is-front, .side-page .matcha-polaroids.cards-ready .note-card:focus-within { z-index: 5; transform: rotate(-1deg); }
+.side-page .matcha-polaroids.cards-ready .note-card:not(.is-front) figcaption, .side-page .matcha-polaroids.cards-ready .note-card:not(.is-front) .photo-link { visibility: hidden; }
+.side-page .matcha-polaroids.cards-ready .note-card:focus-within figcaption, .side-page .matcha-polaroids.cards-ready .note-card:focus-within .photo-link { visibility: visible; }
+.side-page .matcha-polaroids.cards-ready .photo-link { font-size: .8125rem; line-height: 1.5; margin-top: 12px; }
+.side-page .matcha-polaroids .note-card-select { border-radius: 0; }
+.side-page .matcha-polaroids .note-card-select[aria-pressed="true"] { outline: none; }
+.side-page .matcha-polaroids .note-card-select:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+.side-page .matcha-polaroids .note-card-controls { grid-area: 2 / 1; position: relative; z-index: 6; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 52px; }
+.side-page .matcha-polaroids .note-card-controls button { min-width: 0; flex: 1 1 52px; min-height: 44px; font: .875rem / 1.5 var(--sans); }
+.side-page .stack-hint { display: none; font-size: .8125rem; line-height: 1.5; color: var(--muted); text-align: center; margin: 14px 12px 0; }
+.js .side-page .stack-hint { display: block; }
+.side-page .side-activity, .side-page .side-communities { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); gap: clamp(30px, 5vw, 72px); padding: 42px 0; border-top: 1px solid var(--line); }
+.side-page .side-activity h2, .side-page .side-communities h2 { font-size: clamp(2rem, 3vw, 2.5rem); line-height: 1.2; }
+.side-page .side-activity p, .side-page .side-communities p { font-size: 1rem; line-height: 1.85; color: var(--muted); }
+.side-page .side-communities ul { list-style: none; padding: 0; margin: 20px 0 0; }
+.side-page .side-communities li { padding-block: 8px; color: var(--muted); font-size: .9375rem; line-height: 1.65; }
+.side-page .side-communities li span { display: block; color: var(--ink); font-weight: 500; }
+@media (max-width: 800px) {
+  .side-page .side-main { padding-bottom: 44px; }
+  .side-page .side-intro { padding: 35px 0 32px; }
+  .side-page .matcha-story { grid-template-columns: minmax(0, 1fr); padding: 36px 0 50px; gap: 34px; }
+  .side-page .matcha-copy { max-width: 620px; }
+  .side-page .matcha-copy h2 { font-size: clamp(2rem, 6vw, 2.8rem); }
+  .side-page .matcha-copy h2 br { display: none; }
+  .side-page .side-activity, .side-page .side-communities { grid-template-columns: minmax(0, 1fr); gap: 19px; padding: 30px 0; }
+}
+@media (max-width: 420px) {
+  .side-page .matcha-polaroids, .side-page .matcha-polaroids.cards-ready { padding-inline: 21px; }
+  .side-page .matcha-polaroids .note-card { padding: 9px 9px 0; }
+  .side-page .matcha-polaroids figcaption { min-height: 75px; font-size: .8125rem; }
+  .side-page .matcha-polaroids .note-card-controls { gap: 4px; }
+}
+@media print {
+  .side-page .matcha-story { display: block; }
+  .side-page .matcha-polaroids.cards-ready { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: none; padding: 20px 0; }
+  .side-page .matcha-polaroids.cards-ready .note-card { grid-area: auto; transform: none !important; }
+  .side-page .matcha-polaroids.cards-ready .note-card figcaption { visibility: visible; }
+  .side-page .matcha-polaroids.cards-ready .photo-link, .side-page .note-card-controls, .side-page .stack-hint { display: none; }
+}
+
+.side-page .side-activity p + p { margin-top: 16px; }
+.side-page .side-communities li p { margin: 8px 0 12px; font-size: .9375rem; }
+
+/* Keep the photo mats uncaptioned. */
+.side-page .matcha-polaroids .note-card { padding-bottom: 26px; }
+.side-page .lightbox-caption { display: none; }
+
+/* Cheer photos keep their full framing inside square Polaroid mats. */
+.side-page .side-activity.has-photos { align-items: center; padding-block: 60px; }
+.side-page .activity-copy h2 { margin-bottom: 24px; }
+.side-page .cheer-polaroids, .side-page .cheer-polaroids.cards-ready { max-width: 490px; }
+.side-page .cheer-polaroids img { aspect-ratio: 1; object-fit: contain; background: var(--white); }
+@media (max-width: 800px) {
+  .side-page .side-activity.has-photos { padding-block: 38px; gap: 30px; }
+}
+
+/* Seven Class President photos, with the last-first-day picture first. */
+.side-page .president-polaroids, .side-page .president-polaroids.cards-ready { max-width: 490px; }
+.side-page .president-polaroids img { aspect-ratio: 1; object-fit: contain; background: var(--white); }
+.side-page .president-polaroids.cards-ready .note-card:nth-child(5) { transform: translate(-10px, 17px) rotate(-4deg); z-index: 5; }
+.side-page .president-polaroids.cards-ready .note-card:nth-child(6) { transform: translate(9px, -15px) rotate(3deg); z-index: 6; }
+.side-page .president-polaroids.cards-ready .note-card:nth-child(7) { transform: translate(-5px, 7px) rotate(-7deg); z-index: 7; }
+.side-page .president-polaroids.cards-ready .note-card.is-front, .side-page .president-polaroids.cards-ready .note-card:focus-within { z-index: 8; transform: rotate(-1deg); }
+.side-page .president-polaroids .note-card-controls { z-index: 9; }
+.side-page .president-polaroids .note-card-controls button { white-space: nowrap; }
+
+/* One forward control for each Hobbies photo stack. */
+.side-page .matcha-polaroids .note-card-controls { justify-content: center; margin-top: 44px; }
+.side-page .matcha-polaroids .note-card-controls button { flex: 0 0 auto; min-width: 96px; padding: 10px 24px; border: 1px solid var(--line); border-radius: 99px; background: var(--white); }
+.side-page .matcha-polaroids .note-card-controls button:hover { border-color: var(--ink); }
